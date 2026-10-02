@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Products.Api.Persistence;
 using Products.Api.Products;
 
@@ -19,6 +20,15 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy(ProductScopes.Write, policy => policy.RequireAssertion(context => HasScope(context.User, ProductScopes.Write)));
 
 builder.Services.AddHealthChecks().AddDbContextCheck<ProductsDbContext>();
+builder.Services.Configure<HealthCheckServiceOptions>(options =>
+{
+    foreach (var registration in options.Registrations)
+    {
+        registration.Timeout = TimeSpan.FromSeconds(3);
+    }
+});
+
+builder.Services.Configure<RouteHandlerOptions>(options => options.ThrowOnBadRequest = false);
 builder.Services.AddProblemDetails();
 builder.Services.AddValidation();
 builder.Services.AddOpenApi();

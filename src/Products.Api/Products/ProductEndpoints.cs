@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using Products.Api.Persistence;
 
 namespace Products.Api.Products;
@@ -58,8 +59,18 @@ public static class ProductEndpoints
         var product = Product.Create(request.Name, request.Colour, request.Price);
 
         db.Products.Add(product);
-        await db.SaveChangesAsync(cancellationToken);
+
+        try
+        {
+            await db.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException exception) when (IsRetryOfCommittedInsert(exception))
+        {
+        }
 
         return TypedResults.Created($"{Route}/{product.Id}", ProductResponse.From(product));
     }
+
+    private static bool IsRetryOfCommittedInsert(DbUpdateException exception) =>
+        exception.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation };
 }

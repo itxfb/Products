@@ -25,4 +25,10 @@ public sealed class ProductQueryTests
     {
         Assert.Equal([nameof(ProductQuery.Limit)], Validation.Errors(new ProductQuery(null, null, limit)));
     }
+
+    [Fact]
+    public void Validate_ColourWithControlCharacter_ReportsColour()
+    {
+        Assert.Equal([nameof(ProductQuery.Colour)], Validation.Errors(new ProductQuery("Bl\0ack", null)));
+    }
 }

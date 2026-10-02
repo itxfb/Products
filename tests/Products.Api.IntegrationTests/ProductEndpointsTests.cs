@@ -113,10 +113,15 @@ public sealed class ProductEndpointsTests(ProductsApiFactory factory)
         Assert.Equal(created.OrderBy(product => product.Id), [.. first, .. second!]);
     }
 
-    [Fact]
-    public async Task List_LimitAboveMaximum_Returns400()
+    [Theory]
+    [InlineData("limit=101")]
+    [InlineData("limit=0")]
+    [InlineData("limit=many")]
+    [InlineData("after=not-a-guid")]
+    [InlineData("colour=Bl%00ack")]
+    public async Task List_InvalidQuery_Returns400ProblemDetails(string query)
     {
-        var response = await ReadWriteClient().GetAsync(new Uri($"{ProductEndpoints.Route}?limit={ProductQuery.MaxLimit + 1}", UriKind.Relative), CancellationToken);
+        var response = await ReadWriteClient().GetAsync(new Uri($"{ProductEndpoints.Route}?{query}", UriKind.Relative), CancellationToken);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.Equal(ProblemJson, response.Content.Headers.ContentType?.MediaType);
