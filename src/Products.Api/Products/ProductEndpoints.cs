@@ -8,15 +8,13 @@ public static class ProductEndpoints
 {
     public const string Route = "/api/products";
 
-    public static IEndpointRouteBuilder MapProductEndpoints(this IEndpointRouteBuilder app)
+    public static void MapProductEndpoints(this IEndpointRouteBuilder app)
     {
         var products = app.MapGroup(Route);
 
         products.MapGet("/", List).RequireAuthorization(ProductScopes.Read);
         products.MapGet("/{id:guid}", GetById).RequireAuthorization(ProductScopes.Read);
         products.MapPost("/", Create).RequireAuthorization(ProductScopes.Write);
-
-        return app;
     }
 
     public static async Task<Ok<List<ProductResponse>>> List(

@@ -59,8 +59,9 @@ cd web && npm ci && npm run lint && npm run build
 | Setting | Purpose |
 | --- | --- |
 | `ConnectionStrings__Products` | PostgreSQL connection string |
-| `Authentication__Schemes__Bearer__Authority` / `__ValidIssuer` | Public issuer URL tokens must carry |
-| `Authentication__Schemes__Bearer__MetadataAddress` | Discovery document URL reachable from the API |
+| `Authentication__Schemes__Bearer__Authority` | Issuer URL used to discover signing keys (local development) |
+| `Authentication__Schemes__Bearer__MetadataAddress` | Discovery document URL reachable from the API (Compose: internal host) |
+| `Authentication__Schemes__Bearer__ValidIssuer` | Public issuer URL tokens must carry when discovery runs on another host |
 | `Authentication__Schemes__Bearer__ValidAudience` | Required audience, `products-api` by default |
 | `Authentication__Schemes__Bearer__RequireHttpsMetadata` | `false` only for local and Compose |
 | `VITE_OIDC_AUTHORITY`, `VITE_OIDC_CLIENT_ID` | Web build arguments, default to the local realm |

@@ -76,11 +76,8 @@
   "clients": [
     {
       "clientId": "products-web",
-      "name": "Products web",
-      "enabled": true,
       "publicClient": true,
       "standardFlowEnabled": true,
-      "implicitFlowEnabled": false,
       "directAccessGrantsEnabled": false,
       "redirectUris": ["http://localhost:3000/*", "http://localhost:5173/*"],
       "webOrigins": ["http://localhost:3000", "http://localhost:5173"],
@@ -89,7 +86,6 @@
         "post.logout.redirect.uris": "http://localhost:3000/*##http://localhost:5173/*"
       },
       "defaultClientScopes": ["basic", "profile", "products:read", "products:write"],
-      "optionalClientScopes": [],
       "protocolMappers": [
         {
           "name": "products-api audience",

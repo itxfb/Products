@@ -40,7 +40,6 @@ services:
       dockerfile: src/Products.Api/Dockerfile
     environment:
       ConnectionStrings__Products: Host=postgres;Database=products;Username=postgres;Password=postgres;GSS Encryption Mode=Disable
-      Authentication__Schemes__Bearer__Authority: http://localhost:8080/realms/products
       Authentication__Schemes__Bearer__MetadataAddress: http://keycloak:8080/realms/products/.well-known/openid-configuration
       Authentication__Schemes__Bearer__ValidIssuer: http://localhost:8080/realms/products
       Authentication__Schemes__Bearer__RequireHttpsMetadata: "false"
