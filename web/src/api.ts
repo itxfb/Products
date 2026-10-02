@@ -63,7 +63,7 @@ export function useProductsApi() {
 
   return {
     list: (colour: string, after: string | undefined, signal: AbortSignal) => {
-      const params = new URLSearchParams({ limit: String(productRules.pageSize) })
+      const params = new URLSearchParams({ limit: String(productRules.pageSize + 1) })
       if (colour) params.set('colour', colour)
       if (after) params.set('after', after)
       return request<Product[]>(`?${params.toString()}`, { signal })

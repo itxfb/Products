@@ -12,9 +12,10 @@ export default function ProductList() {
     queryKey: [...productsQueryKey, colour],
     queryFn: ({ pageParam, signal }) => api.list(colour, pageParam, signal),
     initialPageParam: undefined as string | undefined,
-    getNextPageParam: lastPage => (lastPage.length === productRules.pageSize ? lastPage.at(-1)?.id : undefined),
+    getNextPageParam: lastPage => (lastPage.length > productRules.pageSize ? lastPage[productRules.pageSize - 1]?.id : undefined),
+    staleTime: 30_000,
   })
-  const products = data?.pages.flat() ?? []
+  const products = data?.pages.flatMap(page => page.slice(0, productRules.pageSize)) ?? []
 
   function applyFilter(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -48,9 +49,9 @@ export default function ProductList() {
         <p className="status" role="status">
           Loading products…
         </p>
-      ) : error ? (
+      ) : !data ? (
         <p className="alert" role="alert">
-          {error.message}
+          {error?.message}
         </p>
       ) : products.length === 0 ? (
         <div className="empty">
@@ -96,6 +97,11 @@ export default function ProductList() {
             )}
           </div>
         </>
+      )}
+      {data && error && (
+        <p className="alert list-error" role="alert">
+          {error.message}
+        </p>
       )}
     </section>
   )

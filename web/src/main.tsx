@@ -9,7 +9,8 @@ import './index.css'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: (failureCount, error) => !(error instanceof ApiError && error.status < 500) && failureCount < 3,
+      retry: (failureCount, error) =>
+        failureCount < 3 && (!(error instanceof ApiError) || error.status === 502 || error.status === 503),
     },
   },
 })

@@ -8,7 +8,7 @@ export default function ProductForm() {
   const formRef = useRef<HTMLFormElement>(null)
   const { mutate, data, error, isPending, isSuccess } = useMutation({
     mutationFn: api.create,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: productsQueryKey }),
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: productsQueryKey }),
   })
   const fieldErrors = error instanceof ApiError ? error.fieldErrors : {}
 

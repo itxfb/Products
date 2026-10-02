@@ -310,6 +310,10 @@ tbody tr:hover {
   margin-top: var(--space-6);
 }
 
+.list-error {
+  margin-top: var(--space-4);
+}
+
 .empty {
   display: grid;
   gap: var(--space-2);

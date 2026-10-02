@@ -1,21 +1,24 @@
-import { useLayoutEffect, useState } from 'react'
+import { useLayoutEffect, useState, useSyncExternalStore } from 'react'
 
 type Theme = 'light' | 'dark'
 
 const storageKey = 'theme'
+const darkScheme = window.matchMedia('(prefers-color-scheme: dark)')
+
+function subscribeToScheme(onChange: () => void) {
+  darkScheme.addEventListener('change', onChange)
+  return () => darkScheme.removeEventListener('change', onChange)
+}
 
 function storedTheme(): Theme | null {
   const stored = localStorage.getItem(storageKey)
   return stored === 'light' || stored === 'dark' ? stored : null
 }
 
-function systemTheme(): Theme {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-}
-
 export default function ThemeToggle() {
   const [chosen, setChosen] = useState(storedTheme)
-  const theme = chosen ?? systemTheme()
+  const systemDark = useSyncExternalStore(subscribeToScheme, () => darkScheme.matches)
+  const theme: Theme = chosen ?? (systemDark ? 'dark' : 'light')
   const next: Theme = theme === 'dark' ? 'light' : 'dark'
 
   useLayoutEffect(() => {
