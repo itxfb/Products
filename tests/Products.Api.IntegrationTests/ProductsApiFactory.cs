@@ -23,7 +23,7 @@ public sealed class ProductsApiFactory : WebApplicationFactory<Program>, IAsyncL
     private const string Audience = "products-api";
 
     private readonly SymmetricSecurityKey _signingKey = new(RandomNumberGenerator.GetBytes(32));
-    private readonly PostgreSqlContainer _database = new PostgreSqlBuilder("postgres:18-alpine").Build();
+    private readonly PostgreSqlContainer _database = new PostgreSqlBuilder("postgres:18.6-alpine").Build();
 
     public HttpClient CreateClientWithScopes(params string[] scopes)
     {
